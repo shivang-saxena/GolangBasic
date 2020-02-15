@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service Posts {
+    rpc CreatePost (Post) returns (Post);
+    rpc GetPost (PostRequest) returns (Post);
+    rpc DeletePost (PostRequest) returns (google.protobuf.Empty);
+    rpc UpdatePost (Post) returns (Post);
+    rpc ListPost (google.protobuf.Empty) returns (ListPostResponse);
+}
+
+
+message PostRequest {
+    string id=1;
+}
+
+message Post{
+    string id = 1;
+    string title =2;
+    string description =3 ;
+    google.protobuf.Timestamp created_on = 4;
+    google.protobuf.Timestamp updated_on = 5;
+}
+
+message ListPostResponse {
+    repeated Post post= 1;
+}
+
+//protoc -I package_name package_name/proto-name --go_out=plugins=grpc:Destination-where you want to generate proto
+//protoc -I pb/ pb/service.proto --go_out=plugins=grpc:pb/
