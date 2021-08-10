@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"net/http"
 	"post-service/pb"
 	"post-service/server"
@@ -18,7 +18,7 @@ func main() {
 		port     = 5432
 		user     = "postgres"
 		password = "root"
-		dbname   = "crud_golang"
+		dbname   = "alfred"
 	)
 
 	conn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
@@ -41,6 +41,7 @@ func main() {
 
 	PostsServiceServer := server.NewPostServer(store.NewPostStore(db))
 	pb.RegisterPostsServiceHandlerServer(ctx, mux, PostsServiceServer)
+	//pb.RegisterPostsServiceGraphql(mux)
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	 err = http.ListenAndServe(":8080", mux)

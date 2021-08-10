@@ -20,27 +20,27 @@ func NewPostServer(postStore store.PostStore) *server {
 
 //creation of new post to store into map
 func (s *server) CreatePost(ctx context.Context, in *pb.Post) (*pb.Post, error) {
-	err := in.Validate()
-	if err != nil {
-		return nil, status.Error(codes.FailedPrecondition, err.Error())
-	}
+	//err := in.Validate()
+	//if err != nil {
+	//	return nil, status.Error(codes.FailedPrecondition, err.Error())
+	//}
 	return s.Store.CreatePost(ctx, in)
 }
 
 func (s *server) GetPost(ctx context.Context, in *pb.GetPostRequest) (*pb.Post, error) {
-	err := in.Validate()
-	if err != nil {
-		return nil, status.Error(codes.FailedPrecondition, err.Error())
-	}
+	//err := in.Validate()
+	//if err != nil {
+	//	return nil, status.Error(codes.FailedPrecondition, err.Error())
+	//}
 
 	return s.Store.GetPost(ctx, in.Id)
 }
 
 func (s *server) DeletePost(ctx context.Context, in *pb.DeletePostRequest) (*empty.Empty, error) {
-	err := in.Validate()
-	if err != nil {
-		return nil, status.Error(codes.FailedPrecondition, err.Error())
-	}
+	//err := in.Validate()
+	//if err != nil {
+	//	return nil, status.Error(codes.FailedPrecondition, err.Error())
+	//}
 	_, errr := s.Store.DeletePost(ctx, in.Id)
 	if errr != nil {
 		return nil, status.Error(codes.Internal, errr.Error())
@@ -50,10 +50,10 @@ func (s *server) DeletePost(ctx context.Context, in *pb.DeletePostRequest) (*emp
 }
 
 func (s *server) UpdatePost(ctx context.Context, in *pb.UpdatePostRequest) (*pb.Post, error) {
-	err := in.Validate()
-	if err != nil {
-		return nil, status.Error(codes.FailedPrecondition, err.Error())
-	}
+	//err := in.Validate()
+	//if err != nil {
+	//	return nil, status.Error(codes.FailedPrecondition, err.Error())
+	//}
 
 	return s.Store.UpdatePost(ctx, in.Post)
 }

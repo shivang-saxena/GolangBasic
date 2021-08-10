@@ -1,64 +1,72 @@
 syntax = "proto3";
 package service.post.v1;
 
-option go_package = "pb";
+option go_package = "pb/";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
 import "validate/validate.proto";
-import "google/api/annotations.proto";
-import "google/protobuf/field_mask.proto";
-source ~/.profile
+import "google/api/annotation.proto";
+import "include/graphql.proto";
+
 service PostsService {
-    rpc CreatePost(Post) returns (Post) {
-        option (google.api.http) = {
-        post: "/v1/post"
-        body: "*"
+  rpc CreatePost(Post) returns (Post) {
+    option (google.api.http) = {
+      post: "/v1/post"
+      body: "*"
     };
-    }
-    rpc GetPost (GetPostRequest) returns (Post) {
-        option (google.api.http) = {
-        get: "/v1/post/{id}"
+    option (graphql.schema) = {
+      type: MUTATION
+      name: "createPost"
     };
-    }
-    rpc DeletePost (DeletePostRequest) returns (google.protobuf.Empty) {
-        option (google.api.http) = {
-        delete: "/v1/post/{id}"
+  }
+  rpc GetPost (GetPostRequest) returns (Post) {
+    option (google.api.http) = {
+      get: "/v1/post/{id}"
     };
-    }
-    rpc UpdatePost (UpdatePostRequest) returns (Post) {
-        option (google.api.http) = {
-        put: "/v1/post/{id}"
-        body: "*"
+    option (graphql.schema) = {
+      type: QUERY
+      name: "post"
     };
-    }
-    rpc ListPosts (google.protobuf.Empty) returns (ListPostResponse) {
-        option (google.api.http) = {
-        get: "/v1/post"
+  }
+  rpc DeletePost (DeletePostRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/post/{id}"
     };
-    }
+  }
+  rpc UpdatePost (UpdatePostRequest) returns (Post) {
+    option (google.api.http) = {
+      put: "/v1/post/{id}"
+      body: "*"
+    };
+  }
+  rpc ListPosts (google.protobuf.Empty) returns (ListPostResponse) {
+    option (google.api.http) = {
+      get: "/v1/post"
+    };
+  }
 }
 
 message Post {
-    string id = 1;
-    string title = 2 [(validate.rules).string.min_len = 2];
-    string description = 3 [(validate.rules).string.min_len = 2];
-    google.protobuf.Timestamp created_on = 4;
-    google.protobuf.Timestamp updated_on = 5;
+  string id = 1;
+  string title = 2 [(validate.rules).string.min_len = 2];
+  string description = 3 [(validate.rules).string.min_len = 2];
+  google.protobuf.Timestamp created_on = 4;
+  google.protobuf.Timestamp updated_on = 5;
 }
 
 message GetPostRequest {
-    string id = 1 [(validate.rules).string.min_len = 1];
+  string id = 1 [(validate.rules).string.min_len = 1];
 }
 message UpdatePostRequest {
-    string id = 1 [(validate.rules).string.min_len = 1];
-    Post post = 2 [(validate.rules).message.required = true];
-    google.protobuf.FieldMask update_mask = 3;
+  string id = 1 [(validate.rules).string.min_len = 1];
+  Post post = 2 [(validate.rules).message.required = true];
+//  google.protobuf.FieldMask update_mask = 3;
 }
 message DeletePostRequest {
-    string id = 1 [(validate.rules).string.min_len = 1];
+  string id = 1 [(validate.rules).string.min_len = 1];
 }
 message ListPostResponse {
-    repeated Post posts = 1;
+  repeated Post posts = 1;
 }
 
 /*
